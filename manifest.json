@@ -1,0 +1,17 @@
+{
+    "name": "2020 LDS Cache Visualization",
+    "version": "1.0",
+    "description": "DevTools extension for data visualization of LDS cache.",
+	  "manifest_version": 2,
+    "permissions": [
+		  "activeTab",
+      "tabs",
+      "<all_urls>"
+    ],
+    "background": {
+      "scripts": ["extension/background.js"],
+      "persistent": false
+    },
+    "devtools_page": "extension/devtools.html"
+
+}
