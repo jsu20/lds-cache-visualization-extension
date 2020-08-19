@@ -70,8 +70,6 @@ function generateTimeline(rawData) {
     }
 
     function getExtraData(method, request) {
-        console.log('extradata');
-        console.log(request);
         if (method == groups[0]) { // adapterCall
             return {
                 "config": request.config,
@@ -134,12 +132,9 @@ function generateTimeline(rawData) {
     TimelinesChart()(document.getElementById("chart_timeline"))
         .zQualitative(true)
         .onSegmentClick(function (s) {
-            console.log('extra');
-            console.log(s.extraData);
             let f = new JSONFormatter(s.extraData);
             let top = document.getElementById("bottom");
             top.innerHTML = "";
-            console.log(f.render());
             top.appendChild(f.render()); 
         })
         .timeFormat("%I:%M:%S.%L %p") // hour:minute:second:ms

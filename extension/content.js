@@ -22,6 +22,8 @@ window.addEventListener("message", function (event) {
     if (event.data.type == MessageName.INITIAL_CACHE_CONTENTS) {
         // get source
         let source = event.data.source;
+        console.log('initial');
+        console.log(source);
         chrome.runtime.sendMessage({ 
             action: MessageAction.InitialPutSource, 
             source: source,
@@ -32,7 +34,9 @@ window.addEventListener("message", function (event) {
     // checks if is proper request
     if (event.data.type == MessageName.CACHE_CONTENTS) {
         let source = event.data.source;
-        let args = event.data.args; // 
+        console.log('data');
+        console.log(source);
+        let args = event.data.args; 
         let method = event.data.method; // storeIngest or storeEvict
         chrome.runtime.sendMessage({ 
             action: MessageAction.PutSource, 

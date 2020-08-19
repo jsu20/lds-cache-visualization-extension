@@ -27,14 +27,17 @@ const MessageAction = {
 let source = null; // will be set after putSource executed
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    // initial message from LDS page
     if (request.action === MessageAction.InitialPutSource) {
         source = request.source;
+        console.log(source);
     }
 
     // sent from content.js, intended for saving source
     if (request.action === MessageAction.PutSource) {
         let method = request.method;
         let args = request.args;
+        console.log(source);
         chrome.runtime.sendMessage({
             action: 'giveSource', 
             source: request.source, 
