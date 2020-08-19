@@ -19,55 +19,48 @@ window.addEventListener("message", function (event) {
     // only accept messages from ourselves
     if (event.source !== window && event.source !== window.frames[0])
         return;
-    if (event.data.type == MessageName.INITIAL_CACHE_CONTENTS) {
+    let data = event.data;
+    if (data.type == MessageName.INITIAL_CACHE_CONTENTS) {
         // get source
-        let source = event.data.source;
-        console.log('initial');
-        console.log(source);
         chrome.runtime.sendMessage({ 
             action: MessageAction.InitialPutSource, 
-            source: source,
-            startTime: event.data.startTime,
-            endTime: event.data.endTime 
+            source: data.source,
+            startTime: data.startTime,
+            endTime: data.endTime 
         });
     }
-    // checks if is proper request
-    if (event.data.type == MessageName.CACHE_CONTENTS) {
-        let source = event.data.source;
-        console.log('data');
-        console.log(source);
-        let args = event.data.args; 
-        let method = event.data.method; // storeIngest or storeEvict
+
+    if (data.type == MessageName.CACHE_CONTENTS) {
         chrome.runtime.sendMessage({ 
             action: MessageAction.PutSource, 
-            source: source, 
-            method: method, 
-            args: args,
-            startTime: event.data.startTime,
-            endTime: event.data.endTime 
+            source: data.source, 
+            method: data.method, // storeIngest or storeEvict
+            args: data.args,
+            startTime: data.startTime,
+            endTime: data.endTime 
         });
     }
 
     if (event.data.type == MessageName.ADAPTER_CALL) {
         chrome.runtime.sendMessage({ 
             action: MessageAction.AdapterCall, 
-            config: event.data.config, 
-            name: event.data.name,
-            startTime: event.data.startTime,
-            endTime: event.data.endTime,
-            method: event.data.method,
-            isCacheHit: event.data.isCacheHit,
-            name: event.data.name, 
-            data: event.data.data
+            config: data.config, 
+            name: data.name,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            method: data.method,
+            isCacheHit: data.isCacheHit,
+            name: data.name, 
+            data: data.data
         });
     }
 
     if (event.data.type == MessageName.BROADCAST) {
         chrome.runtime.sendMessage({ 
             action: MessageAction.Broadcast,
-            startTime: event.data.startTime,
-            endTime: event.data.endTime,
-            method: event.data.method
+            startTime: data.startTime,
+            endTime: data.endTime,
+            method: data.method
         });
     }
 });

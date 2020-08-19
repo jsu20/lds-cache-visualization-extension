@@ -1,6 +1,8 @@
 # lds-cache-visualization-extension
 Chrome DevTools extension for data visualization of LDS cache.
 
+Quip doc: https://salesforce.quip.com/HEQbAExbvaXZ
+
 Extension outline:
 - manifest.json file: metadata
 - devtools.js: on open, triggers `content.js`

@@ -21,7 +21,9 @@ const MessageAction = {
     InitialPutSource: 'InitialPutSource',
     PutSource: 'PutSource',
     AdapterCall: 'AdapterCall',
-    Broadcast: 'Broadcast'
+    Broadcast: 'Broadcast',
+    GiveSource: 'giveSource',
+    GetSource: 'getSource'
 };
 
 let source = null; // will be set after putSource executed
@@ -30,7 +32,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // initial message from LDS page
     if (request.action === MessageAction.InitialPutSource) {
         source = request.source;
-        console.log(source);
     }
 
     // sent from content.js, intended for saving source
@@ -39,7 +40,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         let args = request.args;
         console.log(source);
         chrome.runtime.sendMessage({
-            action: 'giveSource', 
+            action: MessageAction.GiveSource, 
             source: request.source, 
             tabId: tabId, 
             method: method, 
@@ -49,7 +50,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         });
     }
     // sent from Devtools, to get the source
-    if(request.action === 'getSource') {
+    if(request.action === MessageAction.GetSource) {
         sendResponse({ 
             source: source,
             tabId: tabId,
@@ -60,7 +61,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
     if (request.action === MessageAction.AdapterCall) {
         chrome.runtime.sendMessage({
-            action: 'giveSource', 
+            action: MessageAction.GiveSource, 
             startTime: request.startTime,
             endTime: request.endTime,
             method: request.method,
@@ -74,7 +75,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
     if (request.action === MessageAction.Broadcast) {
         chrome.runtime.sendMessage({ 
-            action: 'giveSource',
+            action: MessageAction.GiveSource,
             startTime: request.startTime,
             endTime: request.endTime,
             method: request.method,
