@@ -35,10 +35,8 @@ data format:
 */
 
 function generateTimeline(rawData) {
-    // 3 groups
-    let groups = ["AdapterCall", "storeIngest", "storeBroadcast"];
-    // adapterCall, storeIngest will have labels
-
+    // 4 groups
+    let groups = ["AdapterCall", "storeIngest", "storeEvict", "storeBroadcast"];
     let data = []; //array of objs
     let labelsData = {}; // map label to arr of all data
     // instantiate data obj
@@ -50,13 +48,13 @@ function generateTimeline(rawData) {
         if (method == groups[0]) { // adapterCall
             return request.name + ' ' + request.isCacheHit; // hit or miss
         }
-        if (method == groups[1]) {
+        if (method == groups[1] | method == groups[2]) {
             let name = request.args[0];
             if (name == "") {
                 return "aura";
             }
-            if (name == "UiApi::RecordAvatarsBulk") { // special case
-                return "RecordAvatarsBulk";
+            if (name.includes("UiApi::RecordAvatarsBulk")) { // special case
+                return name.slice("UiApi::".length);
             }
             // else UiApi::Representation
             let ind = name.indexOf("Representation");
@@ -64,7 +62,7 @@ function generateTimeline(rawData) {
 
             return result;
         }
-        if (method == groups[2]) {
+        if (method == groups[3]) {
             return "broadcast";
         }
     }
@@ -73,17 +71,24 @@ function generateTimeline(rawData) {
         if (method == groups[0]) { // adapterCall
             return {
                 "config": request.config,
-                "result-data": request.data
-            }; // config obj, unique
+                "result": request.data
+            }; 
         }
         if (method == groups[1]) {
             let result = {
+                "name": request.args[0],
                 "request": request.args[1],
                 "result": request.args[2]
             };
+            if (request.args[0] === '') {
+                result["name"] = "Aura call";
+            }
             return result;
         }
         if (method == groups[2]) {
+            return { "name": request.args[0] };
+        }
+        if (method == groups[3]) { // storeBroadcast has no extra data
             return {};
         }
     }
