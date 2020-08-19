@@ -30,8 +30,6 @@ chrome.runtime.sendMessage({ action: 'getSource' }, function (response) {
     }
 });
 
-
-
 document.getElementById("button_circles").addEventListener("click", function () {
     if (treeData !== undefined) {
         let f = new JSONFormatter(treeData);
@@ -40,7 +38,6 @@ document.getElementById("button_circles").addEventListener("click", function () 
         top.appendChild(f.render());
     }
 })
-
 
 document.getElementById("button_timeline").addEventListener("click", function () {
     document.getElementById("chart_timeline").innerHTML = ""; // reset

@@ -46,7 +46,7 @@ function generateTimeline(rawData) {
 
     function getLabel(method, request) {
         if (method == groups[0]) { // adapterCall
-            return request.name + ' ' + request.isCacheHit; // hit or miss
+            return request.name; 
         }
         if (method == groups[1] | method == groups[2]) {
             let name = request.args[0];
@@ -101,6 +101,9 @@ function generateTimeline(rawData) {
         let start = new Date(request.startTime);
         let end = new Date(request.endTime);
         let val = label;
+        if (method == groups[0]) {
+            val += ' ' + request.isCacheHit; // hit or miss
+        }
 
         let obj = {
             "timeRange": [start, end],
